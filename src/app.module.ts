@@ -8,7 +8,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
-import { Product } from './products/entities/product.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -29,6 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
