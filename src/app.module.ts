@@ -1,12 +1,38 @@
+// Modules
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+// 
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+// Config
+import { DataSource } from 'typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, ProductsModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get<string>('NEON_DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true, 
+        ssl: {
+          rejectUnauthorized: false, 
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    ProductsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
