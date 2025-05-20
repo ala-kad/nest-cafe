@@ -9,23 +9,26 @@ import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
 import { Product } from './products/entities/product.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    AuthModule, 
-    ProductsModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'nestcafe',
-      entities: [],
-      synchronize: true, // Set to false in production
-      autoLoadEntities: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    TypeOrmModule.forFeature([Product])
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get<string>('NEON_DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true, 
+        ssl: {
+          rejectUnauthorized: false, 
+        },
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
