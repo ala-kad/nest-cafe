@@ -9,9 +9,11 @@ import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
+    ProductsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -28,11 +30,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {
   constructor(private dataSource: DataSource) {}
 }
