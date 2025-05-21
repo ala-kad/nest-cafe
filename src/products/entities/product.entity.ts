@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Order } from "src/orders/entities/order.entity";
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
@@ -16,7 +16,4 @@ export class Product {
 
   @Column({ default: true })
   isAvailable: boolean;
-
-  @OneToMany(() => Order, (order) => order.orderItems)
-  public orders: Order[];
 }
