@@ -10,5 +10,5 @@ export class Order {
   orderDate: Date;
 
   @OneToMany(() => Product, (product) => product.order)
-  orderItems?: Product[];
+  orderItems: Product[];
 }
