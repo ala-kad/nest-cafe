@@ -9,6 +9,6 @@ export class Order {
   @CreateDateColumn({ type: 'date' })
   orderDate: Date;
 
-  @OneToMany(() => Product, (product) => product.order)
+  @OneToMany(() => Product, (product) => product.orders)
   orderItems: Product[];
 }
