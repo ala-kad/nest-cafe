@@ -20,7 +20,7 @@ export class OrderDetails {
   @JoinColumn({ name: 'orderId' })
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.order)
+  @ManyToOne(() => Product, (product) => product.orders)
   @JoinColumn({ name: 'productId' })
   product: Product;
 }
