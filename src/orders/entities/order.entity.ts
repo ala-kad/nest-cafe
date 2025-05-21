@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, ManyToMany, JoinTable } from "typeorm"
 import { Product } from "../../products/entities/product.entity";
 
 @Entity()
@@ -9,6 +9,7 @@ export class Order {
   @CreateDateColumn({ type: 'date' })
   orderDate: Date;
 
-  @OneToMany(() => Product, (product) => product.orders)
-  orderItems: Product[];
+  @ManyToMany(() => Product)
+  @JoinTable()
+  products: Product[]
 }
