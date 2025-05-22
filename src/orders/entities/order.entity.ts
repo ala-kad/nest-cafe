@@ -9,7 +9,7 @@ export class Order {
   @CreateDateColumn({ type: 'date' })
   orderDate: Date;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
+  @ManyToMany(() => Product, { cascade: true })
+  @JoinTable({ name: 'order_products' })
   products: Product[]
 }
