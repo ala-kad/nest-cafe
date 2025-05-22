@@ -15,16 +15,16 @@ export class OrdersService {
   ) {}
 
   create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const order = this.ordersRepository.create(createOrderDto);
-    return this.ordersRepository.save(order);
+    const order = this.ordersRepository.create(Order)
+    return this.ordersRepository.save(createOrderDto);
   }
 
   findAll(): Promise<Order[]> {
-    return this.ordersRepository.find({ relations: ['orderItems'] });
+    return this.ordersRepository.find({ relations: { products: true} });
   }
 
   findOne(id: number): Promise<Order | null> {
-    return this.ordersRepository.findOne({ where: { id }, relations: ['orderItems'] });
+    return this.ordersRepository.findOne({ where: { id }, relations: { products: true} });
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
