@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { Order } from "../../orders/entities/order.entity";  
 
 @Entity()
 export class Product {
@@ -16,4 +17,8 @@ export class Product {
 
   @Column({ default: true })
   isAvailable: boolean;
+
+  @ManyToMany(() =>Order, (order) => order.products)
+  orders: Order[]; // This is the inverse side of the relationship
+
 }
