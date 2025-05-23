@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -25,10 +26,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         ssl: {
           rejectUnauthorized: false, 
         },
+        
       }),
       inject: [ConfigService],
     }),
     ProductsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
