@@ -1,34 +1,37 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Request,
+  UseGuards,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('me')
+  async getMe(@Request() req) {
+    const user = await this.userService.findByUsername(req.user.username);
+    if (!user) throw new NotFoundException('User not found');
+    const { password, ...result } = user;
+    return result;
+  }
+
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() body: { username: string; password: string }) {
+    return this.userService.create(body.username, body.password);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.userService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.userService.remove(id);
+  @Get(':username')
+  async findByUsername(@Param('username') username: string) {
+    const user = await this.userService.findByUsername(username);
+    if (!user) throw new NotFoundException('User not found');
+    const { password, ...result } = user;
+    return result;
   }
 }

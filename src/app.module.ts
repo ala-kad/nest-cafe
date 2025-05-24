@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from './user/user.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { UsersModule } from './user/user.module';
       inject: [ConfigService],
     }),
     ProductsModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
