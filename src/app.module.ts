@@ -23,12 +23,11 @@ import { UsersModule } from './user/user.module';
         ssl: {
           rejectUnauthorized: false, 
         },
+        
       }),
       inject: [ConfigService],
     }),
     ProductsModule,
-    UsersModule,
-    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
