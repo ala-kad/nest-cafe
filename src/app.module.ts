@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 // Config
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -27,6 +28,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         },
       }),
       inject: [ConfigService],
+    }),
+    MulterModule.register({
+      dest: './uploads', // Directory where files will be stored
+      limits: {
+        fileSize: 10 * 1024 * 1024, // Limit file size to 10MB
+      },
     }),
     ProductsModule,
   ],
