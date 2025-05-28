@@ -21,4 +21,6 @@ export class Product {
   @ManyToMany(() =>Order, (order) => order.products)
   orders: Order[]; // This is the inverse side of the relationship
 
+  @Column()
+  imgFile?: string;
 }
