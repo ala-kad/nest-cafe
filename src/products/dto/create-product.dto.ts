@@ -10,4 +10,8 @@ export class CreateProductDto {
   @IsInt()
   @Min(0)  
   quantity: number;
+
+  @IsOptional()
+  @IsString()
+  imgFile?: string;
 }
