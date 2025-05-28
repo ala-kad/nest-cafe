@@ -1,17 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { diskStorage } from 'multer';
+import { fileFilter, fileName } from 'src/utils/files.utils';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads/images', // Directory where files will be stored
+      filename: fileName,
+    }),
+    fileFilter: fileFilter,
+  }))
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if(file) {
+      createProductDto.imgFile = file.filename;
+    }
     return this.productsService.create(createProductDto);
   }
-
+  
   @Get()
   findAll() {
     return this.productsService.findAll();
@@ -27,12 +43,26 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads/images', // Directory where files will be stored
+      filename: fileName,
+    }),
+    fileFilter: fileFilter,
+  }))
+  async update(
+    @Param('id') id: number, 
+    @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     const product = await this.productsService.findOne(id);
     if (!product) {
       throw new NotFoundException(`Product with id ${id} not found`);
     }
-    return this.productsService.update(+id, updateProductDto);
+    if (file) {
+      updateProductDto.imgFile = file.filename;
+    }
+    return this.productsService.update(id, updateProductDto);
   }
 
   @Delete(':id')
@@ -44,4 +74,5 @@ export class ProductsController {
     await this.productsService.remove(+id);
     return { message: `Product with id ${id} deleted successfully` };
   }
+
 }
