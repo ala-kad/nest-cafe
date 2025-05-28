@@ -19,7 +19,7 @@ export class Product {
   isAvailable: boolean;
 
   @ManyToMany(() =>Order, (order) => order.products)
-  orders: Order[]; // This is the inverse side of the relationship
+  orders?: Order[]; // This is the inverse side of the relationship
 
   @Column()
   imgFile?: string;
