@@ -15,7 +15,6 @@ export class OrdersService {
   ) {}
 
   create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const order = this.ordersRepository.create(Order)
     return this.ordersRepository.save(createOrderDto);
   }
 
